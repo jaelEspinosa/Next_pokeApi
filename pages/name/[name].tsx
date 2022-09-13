@@ -20,13 +20,7 @@ const PokemonByNamePage: NextPage<Props> = ({pokemon}) => {
   console.log(pokemon)
   const router = useRouter()
   
-  useEffect(() => {
-    if(!pokemon){
-      
-    router.push('/nopokemon')
-    } 
- 
-  }, [])         
+         
      
     
      const [isInFavorites, setisInFavorites] = useState(localFavorites.existInFavorites(pokemon?.id))
@@ -70,7 +64,7 @@ const PokemonByNamePage: NextPage<Props> = ({pokemon}) => {
         <Grid xs={12} sm={4}>
           <Card isHoverable css={{padding: '30px'}}>
             <Card.Body>
-            <Card.Image src={pokemon?.sprites.other?.dream_world.front_default || '//No-foto.png'} height={250} width={250} alt={pokemon?.name}  />
+            <Card.Image src={pokemon.sprites.other?.dream_world.front_default || '//No-foto.png'} height={250} width={250} alt={pokemon.name}  />
             </Card.Body>
           </Card>
         </Grid>
@@ -94,24 +88,24 @@ const PokemonByNamePage: NextPage<Props> = ({pokemon}) => {
             <Text size={30}>sprites:</Text>
             <Container display='flex' direction='row' gap={0}>
               <Image 
-                   src={pokemon?.sprites.front_default}
-                   alt={pokemon?.name} 
+                   src={pokemon.sprites.front_default}
+                   alt={pokemon.name} 
                    width={100} 
                    height={100}/>
             
               <Image 
-                   src={pokemon?.sprites.back_default} 
-                   alt={pokemon?.name} 
+                   src={pokemon.sprites.back_default} 
+                   alt={pokemon.name} 
                    width={100} 
                    height={100}/>
             
               <Image 
-                   src={pokemon?.sprites.front_shiny}
-                   alt={pokemon?.name}
+                   src={pokemon.sprites.front_shiny}
+                   alt={pokemon.name}
                    width={100} height={100}/>
             
               <Image 
-                   src={pokemon?.sprites.back_shiny} 
+                   src={pokemon.sprites.back_shiny} 
                    alt={pokemon?.name} 
                    width={100} height={100}/>
             </Container>
@@ -133,20 +127,30 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
             params:{ name }
         })),
           
-        fallback:false
+        fallback:'blocking'
       }
     }
     
     export const getStaticProps: GetStaticProps = async ({params}) => {
     const {name} = params as { name: string}
     
-      
+    const pokemon = await getPokemonInfo(name)
+    
+    if (!pokemon){
+      return {
+        redirect:{
+          destination:'/',
+          permanent:false
+        }
+      }
+    }
     
       
       return {
         props: {
-         pokemon: await getPokemonInfo(name)
-        }
+         pokemon
+        },
+        revalidate:86400,
       }
     }
     

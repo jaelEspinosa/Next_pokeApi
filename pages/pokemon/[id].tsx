@@ -119,7 +119,7 @@ const onToggleFavorite = () => {
 
 
 export const getStaticPaths: GetStaticPaths = async (ctx) => {
-//  const { data } = await  // your fetch function here 
+
   const pokemons151 =  [...Array(151)].map((value, i)=> `${i+1}`)
   console.log({pokemons151})
   return {
@@ -127,20 +127,27 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
       params:{ id }
     })),
       
-    fallback: false
+    fallback: 'blocking'
   }
 }
 
 export const getStaticProps: GetStaticProps = async ({params}) => {
 const {id} = params as { id: string}
+ const pokemon = await getPokemonInfo(id) 
 
-
-
-  
+ if (!pokemon) {
+  return {
+    redirect:{
+    destination:'/',
+    permanent:false
+   }
+  }
+ }
   return {
     props: {
-      pokemon:await getPokemonInfo(id)
-    }
+      pokemon
+    },
+    revalidate: 86400,
   }
 }
 
