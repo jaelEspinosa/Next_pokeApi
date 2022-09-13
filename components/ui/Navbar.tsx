@@ -57,7 +57,7 @@ const Navbar = () => {
     size='lg'
     bordered
     color='success'
-    labelPlaceholder="Buscar"
+    labelPlaceholder="Nombre/#pokemon"
     initialValue={busqueda}
     onChange={e=> setBusqueda(e.target.value)}
     

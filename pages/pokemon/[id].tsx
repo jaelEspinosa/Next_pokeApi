@@ -61,7 +61,7 @@ const onToggleFavorite = () => {
         <Grid xs={12} sm={4}>
           <Card isHoverable css={{padding: '30px'}}>
             <Card.Body>
-            <Card.Image src={pokemon.sprites.other?.dream_world.front_default || '//No-foto.png'} height={250} width={250} alt={pokemon.name}  />
+            <Card.Image src={pokemon.sprites.other?.dream_world.front_default || pokemon.sprites.other?.home.front_default || '//No-foto.png'} height={250} width={250} alt={pokemon.name}  />
             </Card.Body>
           </Card>
         </Grid>
@@ -138,7 +138,7 @@ const {id} = params as { id: string}
  if (!pokemon) {
   return {
     redirect:{
-    destination:'/',
+    destination:'/404',
     permanent:false
    }
   }
