@@ -11,7 +11,7 @@ interface Props {
 const PokemonCard : FC<Props>  = ({pokemon}) => {
   const router = useRouter()
   const pokemonClick = ()=>{
-    router.push(`/pokemon/${pokemon.id}`)
+    router.push(`/name/${pokemon.name}`)
   }
   return (
     <Grid xs={6} sm={4} md={3} xl={2} key={pokemon.id}>

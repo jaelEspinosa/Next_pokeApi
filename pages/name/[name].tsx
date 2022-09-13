@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-
 import { Button, Card, Container, Grid, Text, Image } from '@nextui-org/react';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import confetti from 'canvas-confetti'
@@ -7,53 +5,49 @@ import confetti from 'canvas-confetti'
 import React, { useEffect, useState } from 'react'
 import pokeApi from '../../api/pokeApi';
 import { Layout } from '../../components/layouts';
-import { Pokemon } from '../../interfaces';
+import { Pokemon, PokemonListResponse } from '../../interfaces';
 import localFavorites from '../../utils/localFavorites';
 import { getPokemonInfo } from '../../utils';
 
 
-
 interface Props{
-  pokemon: Pokemon;
-}
-
-const pokemonDetail: NextPage<Props> = ({pokemon}) => {
-  console.log('props...',pokemon)
-
-const [isInFavorites, setisInFavorites] = useState(localFavorites.existInFavorites(pokemon.id))
-const [textoBoton, settextoBoton] = useState('Guardar En Favoritos')
- 
-useEffect(() => {
-  if (isInFavorites){
-    settextoBoton('Eliminar Favorito')
-  }else{
- 
-    settextoBoton('Guardar en Favoritos')
+    pokemon: Pokemon;
   }
+
   
-}, [])
-
-
-const onToggleFavorite = () => {
-     localFavorites.toggleFavorite(pokemon.id)
-     setisInFavorites(!isInFavorites)
-     if (isInFavorites){
-      settextoBoton('Guardar en Favoritos')
-    }else{
-      settextoBoton('Eliminar Favorito')
-      confetti({
-        zIndex:999,
-        particleCount: 1000,
-        spread:1000,
-        angle: -100,
-        origin :{
-          x:1,
-          y:0
+const PokemonByNamePage: NextPage<Props> = ({pokemon}) => {
+     const [isInFavorites, setisInFavorites] = useState(localFavorites.existInFavorites(pokemon.id))
+     const [textoBoton, settextoBoton] = useState('Guardar En Favoritos')
+     useEffect(() => {
+        if (isInFavorites){
+          settextoBoton('Eliminar Favorito')
+        }else{
+       
+          settextoBoton('Guardar en Favoritos')
         }
-      })
-    }
-    }
-    
+        
+      }, [])
+      
+      
+      const onToggleFavorite = () => {
+           localFavorites.toggleFavorite(pokemon.id)
+           setisInFavorites(!isInFavorites)
+           if (isInFavorites){
+            settextoBoton('Guardar en Favoritos')
+          }else{
+            settextoBoton('Eliminar Favorito')
+            confetti({
+              zIndex:999,
+              particleCount: 1000,
+              spread:1000,
+              angle: -100,
+              origin :{
+                x:1,
+                y:0
+              }
+            })
+          }
+          }
   return (
     <Layout title={pokemon.name}>
       <Grid.Container css={{marginTop: '5px', paddingTop: '250px'}} gap={2}>
@@ -114,35 +108,32 @@ const onToggleFavorite = () => {
     </Layout>
   )
 }
-
-// You should use getStaticPaths if you’re statically pre-rendering pages that use dynamic routes
-
-
 export const getStaticPaths: GetStaticPaths = async (ctx) => {
-//  const { data } = await  // your fetch function here 
-  const pokemons151 =  [...Array(151)].map((value, i)=> `${i+1}`)
-  console.log({pokemons151})
-  return {
-    paths: pokemons151.map(id => ({
-      params:{ id }
-    })),
+    const {data} = await pokeApi.get<PokemonListResponse>('/pokemon?limit=151')
+    const pokemonNames: string[] = data.results.map(pokemon => pokemon.name)
+            
       
-    fallback: false
-  }
-}
-
-export const getStaticProps: GetStaticProps = async ({params}) => {
-const {id} = params as { id: string}
-
-
-
-  
-  return {
-    props: {
-      pokemon:await getPokemonInfo(id)
+      return {
+          paths: pokemonNames.map(name => ({
+            params:{ name }
+        })),
+          
+        fallback: false
+      }
     }
-  }
-}
+    
+    export const getStaticProps: GetStaticProps = async ({params}) => {
+    const {name} = params as { name: string}
+    
+      
+    
+      
+      return {
+        props: {
+         pokemon: await getPokemonInfo(name)
+        }
+      }
+    }
+    
 
-
-export default pokemonDetail
+export default PokemonByNamePage

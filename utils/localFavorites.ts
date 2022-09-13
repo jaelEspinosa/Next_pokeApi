@@ -1,4 +1,4 @@
-import { Pokemon } from '../interfaces/pokemonFull';
+
 
 
 const  toggleFavorite = (id:number) =>{

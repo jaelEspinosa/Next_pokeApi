@@ -10,6 +10,9 @@ type Props ={
     title?:string
 }
 
+const origin = (typeof window==='undefined' ? '' : window.location.origin)
+
+
 export const Layout:React.FC<Props> = ({children, title})=> {
 
     
@@ -20,6 +23,10 @@ export const Layout:React.FC<Props> = ({children, title})=> {
         <meta name="author" content="JaelEspinosa"/>
         <meta name="descripcion" content={`informacion sobre el pokemon ${title}`}/>
         <meta name="keywords" content={`${title}, pokemon, pokedex`}/>
+
+        <meta property="og:title" content={`informacion sobre el pokémon${title}`} />
+        <meta property="og:description" content={`Esta es la pagina sobre${title}`} />
+        <meta property="og:image" content={`${origin}/img/banner.jpg`} />
            
     </Head>
     <Navbar/>
