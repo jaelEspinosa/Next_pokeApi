@@ -12,7 +12,7 @@ const FavoritePokemon : FC<Props> = ({pokemons}) => {
     <Text h1>Favoritos</Text>
     <Grid.Container
       gap={2}
-      css={{marginTop:'50px'}} 
+      css={{marginTop:'100px'}} 
       direction='row'
       justify='flex-start'
     >  

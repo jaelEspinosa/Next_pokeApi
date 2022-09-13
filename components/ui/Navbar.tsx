@@ -23,11 +23,13 @@ const Navbar = () => {
         display: 'flex',
         width: '100%',
         flexDirection: 'row',
+        flexWrap:'wrap',
+        rowGap:'10px',
         alignItems:'center',
         justifyContent:'start',
         padding: '0px 1px',
         backgroundColor: theme?.colors.gray100.value
-
+       
 
     }}>
         <div>
