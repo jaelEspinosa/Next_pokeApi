@@ -2,17 +2,20 @@ import { Input, Link, Spacer, Text, useTheme } from '@nextui-org/react'
 
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-
-
-
+import { useState } from 'react'
 
 
 const Navbar = () => {
     const router= useRouter()  
     const {theme} = useTheme()
+    const [busqueda, setBusqueda] = useState<string>('')
+      
+  const mostrarPokemon = (e:any)=>{
+    e.preventDefault()
+    router.push(`/name/${busqueda.toLowerCase()}`)
+      
+  }  
     
-       
-  
    return (
     <div style={{
         zIndex:'1',
@@ -40,9 +43,25 @@ const Navbar = () => {
           <Text color='white' h3>okémon</Text>
         </Link>
 <Spacer style={{flex:1}}/>
-
-
-<Spacer style={{flex:2}}/>
+<form
+      onSubmit={mostrarPokemon}
+      style={{
+        display:'flex'
+      }}>
+    <Image style={{cursor:'pointer'}} onClick={mostrarPokemon} src='/lupa.png' alt='buscar' height={50} width={50}/>
+    <Spacer x={1}/>
+    <Input 
+    clearable
+    size='lg'
+    bordered
+    color='success'
+    labelPlaceholder="Buscar"
+    initialValue={busqueda}
+    onChange={e=> setBusqueda(e.target.value)}
+    
+    />
+</form>
+<Spacer style={{flex:1}}/>
   <Link href='/favorites'>
     <Text color='white' 
           css={{
