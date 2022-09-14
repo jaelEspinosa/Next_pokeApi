@@ -1,21 +1,22 @@
 import { Grid, Card } from '@nextui-org/react'
 
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { useEffect } from 'react';
 import pokeApi from '../../api/pokeApi';
 import { Pokemon } from '../../interfaces/pokemonFull';
-import useState from 'react';
+
 
 
 
 interface Props {
     pokemonId: number
 }
+
 const FavoriteCardPokemon: FC<Props> = ({pokemonId}) => {
      
-    /*   const [imagenMostrar, setMostrarImagen] = useState<string>('')   */
+      const [mostrarImagen, setMostrarImagen] = useState('')  
      
       const router = useRouter()
         
@@ -26,15 +27,20 @@ const FavoriteCardPokemon: FC<Props> = ({pokemonId}) => {
       useEffect(() => {
         const obtenerImagenPoke =async () => {
         const {data} = await pokeApi.get<Pokemon>(`/pokemon/${pokemonId}`)
-          console.log(data.sprites.other)
+          if(data.sprites.other?.dream_world.front_default){
+            setMostrarImagen(data.sprites.other?.dream_world.front_default)
+          
+          }else{
+            const url:any  = (data.sprites.other?.home.front_default)
+            setMostrarImagen(url)
+          }
+          
         }
 
       obtenerImagenPoke()
       }, [pokemonId])
 
-
-      const urlPrimary = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${pokemonId}.svg`
-      const urlSecondary = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${pokemonId}.png`
+ 
 
   return (
     <Grid 
@@ -43,18 +49,21 @@ const FavoriteCardPokemon: FC<Props> = ({pokemonId}) => {
         sm={5} 
         md={2} 
         xl={2}
+        justify='center'
+        alignContent='center'
     >
             <Card
             isHoverable
             isPressable
             css={{padding: 10}}
             
+            
             >
               <Image
                      alt='no-foto'
-                     width={250}
-                     height={250}
-                     src = {urlSecondary}
+                     width={350}
+                     height={350}
+                     src = {mostrarImagen}
                     /> 
               
               </Card>
