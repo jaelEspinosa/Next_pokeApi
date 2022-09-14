@@ -7,6 +7,7 @@ interface Props {
 }
 
 const FavoritePokemon : FC<Props> = ({pokemons}) => {
+  
   return (
     <>
     <Text h1>Favoritos</Text>

@@ -18,7 +18,7 @@ interface Props{
 }
 
 const pokemonDetail: NextPage<Props> = ({pokemon}) => {
-  console.log('props...',pokemon)
+ 
 
 const [isInFavorites, setisInFavorites] = useState(localFavorites.existInFavorites(pokemon.id))
 const [textoBoton, settextoBoton] = useState('Guardar En Favoritos')

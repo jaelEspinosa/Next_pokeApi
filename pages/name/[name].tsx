@@ -17,7 +17,7 @@ interface Props{
 
   
 const PokemonByNamePage: NextPage<Props> = ({pokemon}) => {
-  console.log(pokemon)
+  
   const router = useRouter()
   
          
